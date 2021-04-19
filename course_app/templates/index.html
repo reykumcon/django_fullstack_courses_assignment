@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Course Page</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h2>Add a New Course</h2>
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li {% if message.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <form action="add" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group row">
+                        <label for="name" class="col-2 col-form-label">Name:</label>
+                        <div class="col-10">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="content" class="col-2 col-form-label">Description:</label>
+                        <div class="col-10">
+                            <textarea class="form-control" name="content" id="content" cols="30" rows="10"></textarea>
+                        </div>
+                    </div>
+                    <input class="btn btn-info" type="submit" value="Add">
+                </form>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Course Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Date Added</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for course in all_courses %}
+                        <tr>
+                            <td>{{course.name}}</td>
+                            <td>{{course.description.content}}</td>
+                            <td>{{course.created_at}}</td>
+                            <td><a href="/courses/{{course.id}}">remove</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
